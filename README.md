@@ -1,68 +1,70 @@
-# ⚽ Polish Football Data Analysis – Pure Pandas Project
+# Ekstraklasa Data Analysis
 
-This project presents a complete football match data analysis of the Polish Ekstraklasa league using **only the Pandas library in Python**.
-
-It was built with a clear constraint in mind: **no use of external libraries (like NumPy, Matplotlib, Seaborn, or SciPy)**.  
-The goal was to master the essential `pandas` functions to explore, group, merge, filter, and summarize real-world football data in a clean and replicable way.
-
----
-
-## 🎯 Project Objective
-
-> **Demonstrate full data analysis capabilities using only `pandas`, with a focus on football match data.**
-
-Specifically:
-- Gain deeper familiarity with Pandas functions (e.g., `.groupby()`, `.merge()`, `.iloc`, etc.)
-- Build a clean and consistent pipeline of data exploration
-- Derive useful football stats without relying on visualization libraries or Jupyter widgets
+This project analyzes match data from the **Polish Ekstraklasa** (top football league in Poland) using Python and Jupyter Notebooks.  
+The dataset (`POL.xlsx`) contains match-level data such as teams, goals, results, dates, and betting odds.  
+The analysis produces summary statistics, visualizations, and reports.
 
 ---
 
-## 📁 Dataset Overview
+## 📂 Project Structure
 
-- File: `POL.xlsx` (loaded via `pd.read_excel`)
-- Matches from Polish Ekstraklasa league (multiple seasons)
-- Contains: dates, teams, scores (home/away), match outcomes, time of matches, and betting odds (`PSCH`, `PSCA`, `PSCD`)
-
----
-
-## 🧠 Key Techniques Used
-
-The following Pandas functions were extensively applied in this project:
-
-| Function         | Description                                     | Usage Count |
-|------------------|--------------------------------------------------|-------------|
-| `.groupby()`     | Aggregation by team, season, or match time       | 12×         |
-| `.merge()`       | Combining goal totals with points per team       | 2×          |
-| `.value_counts()`| Counting matches per team (home/away)           | 2×          |
-| `.iloc[]`        | Selecting rows by position/index                 | 4×          |
-| `.loc[]`         | Selecting rows by condition                      | 1×          |
-| `df[...] = ...`  | Creating new columns (e.g., total goals)         | 4×          |
-| `read_excel()`   | Reading the original Excel file                  | 1×          |
-
-> No visualizations (`.plot()`, `matplotlib`, `seaborn`) were used intentionally.
+- `projekt.ipynb` — main Jupyter Notebook with all code, analysis, and visualizations.  
+- `POL.xlsx` — raw dataset with match results and betting odds.  
+- `figures/` — folder with all generated plots (PNG).  
+- `exports/` — folder with exported CSV tables and results.  
+- `report.md` / `report.html` — auto-generated report with insights and plots.  
+- `ekstraklasa_extras.py` — extra functions for Elo ratings, Poisson model, head-to-head heatmaps, and rolling form.
 
 ---
 
-## 📊 Analyses Performed
+## ⚽ Data Description
 
-- Total and average goals by season
-- Home vs away performance
-- Most goals in a single match
-- Most goal-heavy teams
-- Distribution of match times (e.g. when most goals were scored)
-- Team points based on match results (3/1/0 system)
-- Join/merge operations to compare stats across dimensions
+Each row in `POL.xlsx` represents a single match and typically includes:
+
+- `Date` — match date  
+- `Season` — season (e.g. 2021/2022)  
+- `HomeTeam`, `AwayTeam` — team names  
+- `FTHG`, `FTAG` — full-time home and away goals  
+- `FTR` — full-time result (`H`, `D`, `A`)  
+- `PSCH`, `PSCD`, `PSCA` — betting odds for home, draw, away  
+
+Derived variables:
+- `TotalGoals` = `FTHG + FTAG`  
+- Probabilities implied from odds (`pH`, `pD`, `pA`)  
 
 ---
 
-## 🧩 Example: Combining Goals + Points via `merge()`
+## 📊 Analyses & Visualizations
 
-```python
-team_stats = pd.merge(
-    total_goals.rename('GoalsScored'),
-    home_points.rename('HomePoints'),
-    left_index=True,
-    right_index=True,
-    how='inner'
-)
+The notebook generates multiple insights and plots:
+
+1. **Average goals per season** — line chart.  
+2. **Match outcomes (H/D/A) shares per season** — bar chart.  
+3. **Histogram of total match goals** — goal distribution.  
+4. **Over 1.5 / Over 2.5 goals trend** — seasonal proportions.  
+5. **Points table and title race** — cumulative points race for top 4 teams.  
+6. **Home vs Away goals by team** — grouped bar chart.  
+7. **Kickoff time distribution** — most common match hours.  
+8. **Rolling team form** — moving averages of points and goals.  
+9. **Elo ratings** — rating progression over time for selected teams.  
+10. **Head-to-Head heatmaps** — goal differences between teams in a season.  
+11. **Betting odds calibration** — reliability plots for H/D/A outcomes.  
+12. **Scatter: implied p(H) vs goal difference** — how well odds reflect match dominance.
+
+---
+
+## 📈 Methods
+
+- **Descriptive statistics** with `pandas`  
+- **Visualizations** with `matplotlib`  
+- **Elo rating system** for team strength over time  
+- **Poisson model** for expected goals and win/draw probabilities  
+- **Betting market calibration** via Brier score and calibration plots  
+
+---
+
+## 🚀 How to Run
+
+1. Install required Python libraries:
+   ```bash
+   pip install pandas numpy matplotlib openpyxl
